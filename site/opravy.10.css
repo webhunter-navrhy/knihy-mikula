@@ -55,3 +55,13 @@ main p,main h1,main h2,main h3,main dd,footer p,footer a{overflow-wrap:anywhere}
 .po-akc,.logo{min-height:44px;min-width:44px}.po-nav a,.mnav a{min-height:44px;display:inline-flex;align-items:center}
 .po-nav a{padding-top:8px;padding-bottom:8px}.mnav a{display:flex}
 @media(max-width:600px){.vyp{padding:28px 20px 22px}.vyp h2{font-size:21px}}
+
+.adm-btn{display:none!important}
+.po-ht .vyp-s{margin-bottom:14px}.po-lead{margin:12px 0 4px;font-size:17px;line-height:1.5;max-width:46ch}
+.po-pruh{padding-top:8px;padding-bottom:8px}
+.po-pr{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 12px}
+.po-pr a{flex:0 0 150px;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.3}
+.po-pr img{width:150px;height:190px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid var(--line)}
+.po-pr span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.po-hp-n,.po-h a,.pt a{display:inline-flex;align-items:center;min-height:44px}
+.logo{display:inline-flex;align-items:center}.logo img{min-height:36px}

@@ -180,11 +180,15 @@ function uprav(){kat.forEach(function(a){a.style.display=""});
   for(var i=kat.length-1;i>=0&&n.scrollWidth>n.clientWidth+1;i--)kat[i].style.display="none"}
 addEventListener("resize",uprav);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(uprav);uprav()})();
 
-/* vyskakovacie okienko o výpredaji (raz za návštevu) */
-(function(){var BASE_=(document.querySelector('script[src*="eshop."]').src||'').replace(/eshop[^\/]*$/,'');var KP="mikula:vypredaj";try{if(sessionStorage.getItem(KP))return}catch(e){}
-var o=document.createElement("div");o.className="vyp-o";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-labelledby","vyp-t");
-o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Výpredaj učebníc a slovníkov</h2><p>Učebnice a slovníky z nášho skladu za zvýhodnené ceny. Platí do vypredania zásob.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
-function zavri(){o.remove();document.removeEventListener("keydown",kd);try{sessionStorage.setItem(KP,"1")}catch(e){}}
+/* okienko o výpredaji: len úvodná strana, len pri odchode kurzora z okna (PC), raz za návštevu */
+(function(){if(document.body.getAttribute("data-pre"))return;var KP="mikula:vypredaj";try{if(sessionStorage.getItem(KP))return}catch(e){}
+var BASE_=(document.querySelector('script[src*="eshop."]').src||'').replace(/eshop[^\/]*$/,'');var o=null;
+function zavri(){if(o){o.remove();o=null}document.removeEventListener("keydown",kd);try{sessionStorage.setItem(KP,"1")}catch(e){}}
 function kd(e){if(e.key==="Escape")zavri()}
+function otvor(){if(o)return;try{if(sessionStorage.getItem(KP))return}catch(e){}
+o=document.createElement("div");o.className="vyp-o";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-labelledby","vyp-t");
+o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Výpredaj učebníc a slovníkov</h2><p>Učebnice a slovníky z nášho skladu za zvýhodnené ceny. Platí do vypredania zásob.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
 o.addEventListener("click",function(e){if(e.target===o||e.target.closest(".vyp-x")||e.target.closest("a"))zavri()});
-document.addEventListener("keydown",kd);if(document.body.getAttribute('data-pre'))return;setTimeout(function(){document.body.appendChild(o);var b=o.querySelector(".bt");if(b)b.focus()},8000)})();
+document.addEventListener("keydown",kd);document.body.appendChild(o);var b=o.querySelector(".bt");if(b)b.focus()}
+document.addEventListener("mouseout",function(e){if(!e.relatedTarget&&e.clientY<=0)otvor()});
+})();

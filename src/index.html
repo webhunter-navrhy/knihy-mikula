@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+{% set titulek = site.nazev ~ ' – doplnit klíčové slovo a město' %}
+{% set cesta = '' %}
+{% block obsah %}
+<section class="sekce hero">
+  <div class="wrap">
+    <h1>{{ site.nazev }}</h1>
+    <p>Úvodní věta: co firma dělá, pro koho a kde.</p>
+    {# První img() na stránce se načte hned (eager, fetchpriority high), další jsou lazy. #}
+    {{ img('placeholder.jpg', 'Popis fotky pro čtečky a SEO (nebo "" u čistě dekorativní)', sizes='(min-width: 72rem) 72rem, 100vw') }}
+  </div>
+</section>
+<section class="sekce" id="sluzby">
+  <div class="wrap">
+    <h2>Služby</h2>
+    <ul role="list">
+      {% for s in data.sluzby %}<li><h3>{{ s.nazev }}</h3><p>{{ s.popis }}</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+<section class="sekce" id="kontakt">
+  <div class="wrap">
+    <h2>Kontakt</h2>
+    {% include "_formular.html" %}
+  </div>
+</section>
+{% endblock %}

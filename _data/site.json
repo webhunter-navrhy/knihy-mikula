@@ -1,0 +1,43 @@
+{
+  "slug": "knihy-mikula",
+  "nazev": "Knihy Mikula",
+  "url": "https://webhunter-navrhy.github.io/knihy-mikula/",
+  "base": "/knihy-mikula/",
+  "lang": "cs",
+  "popis": "Krátký popis firmy pro Google a sdílení (120–160 znaků, konkrétně: co, kde, pro koho).",
+  "navrh": true,
+  "domena": "",
+  "og_image": "placeholder.jpg",
+  "logo": "",
+  "theme_color": "#ffffff",
+  "typ": "LocalBusiness",
+  "ico": "",
+  "kontakt": {
+    "email": "",
+    "telefon": "",
+    "adresa": {
+      "ulice": "",
+      "psc": "",
+      "mesto": "",
+      "zeme": "CZ"
+    }
+  },
+  "oteviraci_doba": [],
+  "sameas": [],
+  "cenove_rozpeti": "",
+  "formular": {
+    "endpoint": "",
+    "demo": true,
+    "predmet": "Poptávka z webu"
+  },
+  "nav": [
+    {
+      "text": "Služby",
+      "href": "#sluzby"
+    },
+    {
+      "text": "Kontakt",
+      "href": "#kontakt"
+    }
+  ]
+}

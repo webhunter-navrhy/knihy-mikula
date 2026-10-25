@@ -1,0 +1,53 @@
+/* Opravy rozloženia z pilotu (maratón 10.–11. 10. 2026), načítané PO šablóne t-*.css (prebíja ju). */
+.kr[hidden]{display:none!important}.ae-txt:empty,.jo-txt:empty{display:none}@media(min-width:861px){.vy{grid-template-columns:repeat(var(--vy-n,4),1fr)}}@media(max-width:860px){.vy[style*='--vy-n:3']{grid-template-columns:1fr}}
+@media(min-width:701px){.kol-rad{grid-template-columns:repeat(var(--kol-n,4),minmax(0,1fr))}}
+@media(max-width:700px){.kol-rad[style*='--kol-n:3']{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* BRITTO karty „Naša ponuka“: fotka nad nadpisom ako v predlohe (nie cez text), bez výrezu v bielej dlaždici */
+.br-k .br-k-f{position:relative;left:auto;top:auto;margin-bottom:auto;width:min(44%,150px)}
+.br-k-dl{background:#fff;border-radius:22px;padding:10px;box-shadow:0 14px 30px -18px rgba(0,0,0,.3)}
+.br-k-dl img{border-radius:12px}
+@media(max-width:700px){.kol-rad[style*='--kol-n:3']{gap:10px}.kol-rad[style*='--kol-n:3'] b{font-size:11px}
+.kol-rad[style*='--kol-n:3'] span:not(.kol-f){display:none}
+.kol-rad[style*='--kol-n:3'] .kol{min-width:0}.kol-rad[style*='--kol-n:3'] b{letter-spacing:.02em;hyphens:auto;overflow-wrap:anywhere}}
+.ae-txt:empty+.ae-bt{margin-top:28px}
+/* detail na mobile: „1fr“ sa roztiahol podľa tlačidla „Pridať do košíka“ (360 px = posun o 1 px do strany) */
+@media(max-width:900px){.dt{grid-template-columns:minmax(0,1fr)}.dt-k .bt{min-width:0;padding-left:12px;padding-right:12px}}
+aside.fl{max-width:100vw;box-sizing:border-box}
+/* 320 px (najmenšie telefóny): lišta výpisu sa zalomí, select sa zmenší */
+@media(max-width:400px){.vp-lista{flex-wrap:wrap}.vp-lista>span:last-child{flex:1;min-width:0}.vp-lista select{min-width:0;flex:1;max-width:100%}}
+.dt-i h1,.kr-t a{overflow-wrap:anywhere;hyphens:auto}
+/* AERIS: dlhý názov obchodu v hlavičke na mobile („ELEKTROST…“) -> menšie písmo a prestrkanie, nech sa zmestí */
+@media(max-width:600px){.ae-logo{font-size:clamp(12px,4.1vw,18px)!important;letter-spacing:.1em!important;text-overflow:clip!important}
+.ae-nav-r a[aria-label='Hľadať'],.ae-nav-r a[aria-label='Účet']{display:none}}
+/* dlhý e-mail (drevoochrana@drevoochrana.sk) sa na mobile nezalomil v kontakte ani pätičke */
+dd,.pt a,.pt p{overflow-wrap:anywhere}.kt>*,.pt .w>*,.on>*{min-width:0}
+.jo-logo-b{height:34px;width:auto;max-width:180px;object-fit:contain;filter:brightness(0) invert(1);display:block}
+@media(max-width:900px){.pk,.pole{grid-template-columns:minmax(0,1fr)}.pole input,.pole textarea{min-width:0;width:100%}}
+/* BRITTO ako predloha: obrí názov tmavý zľava, doprava prechádza do farby obchodu (BRIT|TO, CO|OKIE) */
+.br-text>span{display:inline-block;background:linear-gradient(90deg,#2b2224 0%,#2b2224 42%,var(--g1) 100%);
+-webkit-background-clip:text;background-clip:text;color:transparent!important}
+@media(max-width:400px){.pk .bt{white-space:normal;max-width:100%;height:auto;min-height:48px;line-height:1.3;padding-top:10px;padding-bottom:10px}}
+/* 11. 10. prenos do linky (kontrola 635 webov na 320 px): dlhé jednoslovné nadpisy („ELEKTROSÚČIASTKY“, „Najlacnejsieautobaterie.eu“) */
+.ae-hero-t h1,.jo-t h1,.jo-nad,.jo-txt,.br-text,.vp-h h1,.tx h1,.ae-h2,.mz-t,.kol b{overflow-wrap:anywhere;hyphens:auto}
+.jo-t,.ae-hero-t,.jo-nav>*,.ae-nav>*{min-width:0}
+@media(max-width:400px){.ae-hero-t h1{font-size:clamp(24px,8vw,46px)}.jo-t h1{font-size:clamp(26px,8.6vw,34px);max-width:100%}
+.jo-ikony{overflow-x:auto;scrollbar-width:none}.zalozky{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}}
+/* cena + pôvodná cena + srdce v úzkej karte (2 stĺpce na 320 px): pôvodná cena sa zalomí pod cenu */
+.kr-r .c,.kr-t .c{min-width:0}.c s{display:inline-block;white-space:nowrap}
+/* ich texty bez medzier („potreby,farby,pastelky,peračníky,…“) a dlhé telefóny/e-maily sa zalomia */
+main p,main h1,main h2,main h3,main dd,footer p,footer a{overflow-wrap:anywhere}.vy>div,.kt>*{min-width:0}
+@media(max-width:400px){.jo-pil{padding-left:12px;gap:4px}.jo-pil select{max-width:104px;font-size:13px}.jo-pil button{padding:10px 14px}}
+/* dlhý názov obchodu v hlavičke podstránok a JOHN na 320 px („AUTOBOXY SLOVAKIA“) */
+@media(max-width:400px){.hl .logo{flex:0 1 auto;min-width:0;overflow:hidden}.hl .logo b{font-size:17px;max-width:100%;min-width:0}
+.jo-nav{gap:10px;padding-left:16px;padding-right:16px}.jo-nav>b,.jo-nav>a>b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+/* košík/súhrn: dlhý názov produktu nesmie vytlačiť cenu (1fr -> minmax(0,1fr)); JOHN pilulky s dlhým slovom */
+.pol{grid-template-columns:72px minmax(0,1fr) auto}.suhrn .pol{grid-template-columns:56px minmax(0,1fr) auto}.pol>*{min-width:0}
+.jo-pilulky>*{min-width:0}.jo-pl b{overflow-wrap:anywhere;hyphens:auto}
+@media(max-width:400px){.t-aeris .hl .w{grid-template-columns:minmax(0,1fr) auto auto}.t-aeris .hl .logo{max-width:100%}.t-aeris .hl .logo b{letter-spacing:.14em;font-size:15px}}
+
+.vyp-o{position:fixed;inset:0;z-index:10000;background:rgba(18,18,18,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.vyp{background:#fff;color:#121212;max-width:460px;width:100%;border-radius:14px;padding:32px 28px 28px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.vyp-x{position:absolute;top:10px;right:12px;background:none;border:0;font-size:20px;cursor:pointer;color:#121212;padding:8px}
+.vyp-s{display:inline-block;background:#cc3333;color:#fff;font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+.vyp h2{font-size:24px;line-height:1.2;margin:0 0 10px}.vyp p{margin:0 0 20px;line-height:1.5}
+.po-nav .po-jaz{border-left:1px solid #ddd;padding-left:14px;margin-left:4px}

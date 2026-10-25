@@ -183,8 +183,8 @@ addEventListener("resize",uprav);if(document.fonts&&document.fonts.ready)documen
 /* vyskakovacie okienko o výpredaji (raz za návštevu) */
 (function(){var BASE_=(document.querySelector('script[src*="eshop."]').src||'').replace(/eshop[^\/]*$/,'');var KP="mikula:vypredaj";try{if(sessionStorage.getItem(KP))return}catch(e){}
 var o=document.createElement("div");o.className="vyp-o";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-labelledby","vyp-t");
-o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Učebnice a slovníky za výpredajové ceny</h2><p>Po 36 rokoch vydávame posledné zásoby. Anglický, nemecký, francúzsky, taliansky či španielsky jazyk: čo je na sklade, to sa predáva, kým sa nerozchytá.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
+o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Výpredaj učebníc a slovníkov</h2><p>Učebnice a slovníky z nášho skladu za zvýhodnené ceny. Platí do vypredania zásob.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
 function zavri(){o.remove();document.removeEventListener("keydown",kd);try{sessionStorage.setItem(KP,"1")}catch(e){}}
 function kd(e){if(e.key==="Escape")zavri()}
 o.addEventListener("click",function(e){if(e.target===o||e.target.closest(".vyp-x")||e.target.closest("a"))zavri()});
-document.addEventListener("keydown",kd);setTimeout(function(){document.body.appendChild(o);var b=o.querySelector(".bt");if(b)b.focus()},900)})();
+document.addEventListener("keydown",kd);if(document.body.getAttribute('data-pre'))return;setTimeout(function(){document.body.appendChild(o);var b=o.querySelector(".bt");if(b)b.focus()},8000)})();

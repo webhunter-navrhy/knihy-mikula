@@ -181,9 +181,9 @@ function uprav(){kat.forEach(function(a){a.style.display=""});
 addEventListener("resize",uprav);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(uprav);uprav()})();
 
 /* vyskakovacie okienko o výpredaji (raz za návštevu) */
-(function(){var KP="mikula:vypredaj";try{if(sessionStorage.getItem(KP))return}catch(e){}
+(function(){var BASE_=(document.querySelector('script[src*="eshop."]').src||'').replace(/eshop[^\/]*$/,'');var KP="mikula:vypredaj";try{if(sessionStorage.getItem(KP))return}catch(e){}
 var o=document.createElement("div");o.className="vyp-o";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-labelledby","vyp-t");
-o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Učebnice a slovníky za výpredajové ceny</h2><p>Po 36 rokoch vydávame posledné zásoby. Anglický, nemecký, francúzsky, taliansky či španielsky jazyk: čo je na sklade, to sa predáva, kým sa nerozchytá.</p><a class="bt" href="'+PRE+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
+o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Učebnice a slovníky za výpredajové ceny</h2><p>Po 36 rokoch vydávame posledné zásoby. Anglický, nemecký, francúzsky, taliansky či španielsky jazyk: čo je na sklade, to sa predáva, kým sa nerozchytá.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
 function zavri(){o.remove();document.removeEventListener("keydown",kd);try{sessionStorage.setItem(KP,"1")}catch(e){}}
 function kd(e){if(e.key==="Escape")zavri()}
 o.addEventListener("click",function(e){if(e.target===o||e.target.closest(".vyp-x")||e.target.closest("a"))zavri()});

@@ -67,3 +67,6 @@ main p,main h1,main h2,main h3,main dd,footer p,footer a{overflow-wrap:anywhere}
 .logo{display:inline-flex;align-items:center}.logo img{min-height:36px}
 
 .pt a{display:flex!important}.po-dk,.po-pr+*{min-height:44px}.logo{min-width:44px}
+.po-hf img{max-width:440px;width:100%;height:auto;margin-inline:auto;display:block}
+.kr-t>a{display:inline-block;min-height:44px}
+.logo{min-height:44px;display:inline-flex;align-items:center}

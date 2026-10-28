@@ -108,17 +108,17 @@ if(mriezka){
 /* pokladňa (ukážka): košík -> doprava a platba -> údaje -> potvrdenie s ukážkou e-mailu */
 var pk=document.querySelector("[data-pokladna]");
 if(pk){
-  var krok=1,vol={d:"kurier",pl:"karta"};
+  var krok=1,vol={d:"kurier",pl:"prevod"};
   var DOP={kurier:["Kuriér na adresu","Doručenie do 1–2 pracovných dní",4.9],box:["Výdajné miesto alebo Z-BOX","Vyzdvihnete, keď sa Vám to hodí",2.9],osobne:["Osobný odber","Na našej adrese "+(E.mesto||""),0]};
-  var PLA={karta:["Platba kartou cez Stripe","Visa, Mastercard, Maestro, bezpečne cez platobnú bránu Stripe",0],apple:["Apple Pay / Google Pay","Cez Stripe, rýchla platba telefónom",0],prevod:["Bankový prevod","Údaje pošleme e-mailom",0],dobierka:["Dobierka","Platba pri prevzatí",1.5]};
+  var PLA={karta:["Platba kartou cez Stripe","Visa, Mastercard, Maestro, bezpečne cez platobnú bránu Stripe",0],apple:["Apple Pay / Google Pay","Cez Stripe, rýchla platba telefónom",0],prevod:["Bankový prevod","Údaje a QR kód dostanete hneď po objednávke",0],dobierka:["Dobierka","Platba pri prevzatí",1.5]};
   /* doprava a platby z ich súčasných podmienok (data.js E.dop / E.pla); cena null = podľa ich cenníka */
   if(E.dop&&E.dop.length){DOP={};E.dop.forEach(function(x){DOP[x[0]]=[x[1],x[2],x[3]]});vol.d=E.dop[0][0]}
-  if(E.pla){Object.keys(PLA).forEach(function(k){if(k!=="karta"&&k!=="apple"&&E.pla.indexOf(k)<0)delete PLA[k]});if(PLA.dobierka)PLA.dobierka[2]=null}
+  if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(PLA.dobierka)PLA.dobierka[2]=null}
   function poplatky(){return (DOP[vol.d][2]||0)+(PLA[vol.pl][2]||0)}
   function neznama(){return DOP[vol.d][2]===null||PLA[vol.pl][2]===null}
   function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+
     '<div class="rd" style="margin-top:10px"><span>Tovar</span><span>'+eur(spolu())+'</span></div><div class="rd"><span>Doprava a platba</span><span>'+(neznama()?"podľa cenníka":poplatky()?eur(poplatky()):"zadarmo")+'</span></div>'+
-    '<div class="rd sp"><span>'+(neznama()?"Spolu s DPH bez dopravy":"Spolu s DPH")+'</span><span>'+eur(spolu()+poplatky())+'</span></div><p class="pozn">Ukážka pokladne: objednávka sa z návrhu nikam neodošle a nič sa neplatí.</p></aside>'}
+    '<div class="rd sp"><span>'+(neznama()?"Spolu s DPH bez dopravy":"Spolu s DPH")+'</span><span>'+eur(spolu()+poplatky())+'</span></div><p class="pozn">Platba bankovým prevodom, údaje dostanete e-mailom.</p></aside>'}
   function kroky(){return '<div class="kroky">'+["Košík","Doprava a platba","Údaje","Hotovo"].map(function(t,i){return '<span class="'+(i+1===krok?"ak2":"")+'">'+(i+1)+". "+t+'</span>'}).join("")+'</div>'}
   function moznosti(meno,M,akt){return '<div class="vol">'+Object.keys(M).map(function(k){return '<label><input type="radio" name="'+meno+'" value="'+k+'"'+(k===akt?" checked":"")+'><span>'+M[k][0]+'<small>'+esc(M[k][1])+'</small></span><span>'+(M[k][2]===null?"podľa cenníka":M[k][2]?eur(M[k][2]):"zadarmo")+'</span></label>'}).join("")+'</div>'}
   window.__pokladna=function(){
@@ -127,25 +127,33 @@ if(pk){
     var h='<div class="pk"><div>'+kroky();
     if(krok===1)h+='<h2>Košík</h2>'+K.map(function(x){return polozka(x,1)}).join("")+'<div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap"><button class="bt" data-dalej>Doprava a platba</button><a class="bt sv" href="'+PRE+'produkty/">Nakupovať ďalej</a></div>';
     if(krok===2)h+='<h2>Doprava</h2>'+moznosti("d",DOP,vol.d)+'<h2>Platba</h2>'+moznosti("pl",PLA,vol.pl)+'<button class="bt" data-dalej>Pokračovať</button>';
-    if(krok===3)h+='<h2>Kontaktné údaje</h2><form data-form><div class="pole"><label>Meno a priezvisko<input name="meno" required autocomplete="name" value="Jana Nováková"></label><label>E-mail<input name="email" type="email" required autocomplete="email" value="jana.novakova@example.sk"></label>'+
-      '<label>Telefón<input name="tel" autocomplete="tel" value="+421 900 123 456"></label><label>PSČ<input name="psc" autocomplete="postal-code" value="811 01"></label><label class="cele">Ulica a číslo<input name="ulica" autocomplete="street-address" value="Hlavná 12"></label>'+
-      '<label class="cele">Mesto<input name="mesto" autocomplete="address-level2" value="Bratislava"></label><label class="cele">Poznámka k objednávke<textarea name="pozn"></textarea></label></div>'+
-      '<label class="suhlas"><input type="checkbox" required checked> <span>Súhlasím s <a class="odk" href="'+PRE+'obchodne-podmienky/">obchodnými podmienkami</a> a beriem na vedomie <a class="odk" href="'+PRE+'ochrana-osobnych-udajov/">spracúvanie osobných údajov</a>.</span></label>'+
+    if(krok===3)h+='<h2>Kontaktné údaje</h2><form data-form><div class="pole"><label>Meno a priezvisko<input name="meno" required autocomplete="name"></label><label>E-mail<input name="email" type="email" required autocomplete="email"></label>'+
+      '<label>Telefón<input name="tel" autocomplete="tel"></label><label>PSČ<input name="psc" required autocomplete="postal-code"></label><label class="cele">Ulica a číslo<input name="ulica" required autocomplete="street-address"></label>'+
+      '<label class="cele">Mesto<input name="mesto" required autocomplete="address-level2" ></label><label class="cele">Poznámka k objednávke<textarea name="pozn"></textarea></label></div>'+
+      '<input name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0"><label class="suhlas"><input type="checkbox" name="agree" required> <span>Súhlasím s <a class="odk" href="'+PRE+'obchodne-podmienky/">obchodnými podmienkami</a> a beriem na vedomie <a class="odk" href="'+PRE+'ochrana-osobnych-udajov/">spracúvanie osobných údajov</a>.</span></label>'+
       '<button class="bt" type="submit">Objednať s povinnosťou platby</button></form>';
     h+='</div>'+suhrn()+'</div>';pk.innerHTML=h;
     var d=pk.querySelector("[data-dalej]");if(d)d.addEventListener("click",function(){krok++;window.__pokladna();scrollTo(0,0)});
     pk.querySelectorAll("input[type=radio]").forEach(function(r){r.addEventListener("change",function(){vol[r.name]=r.value;window.__pokladna()})});
-    var f=pk.querySelector("[data-form]");if(f)f.addEventListener("submit",function(e){e.preventDefault();hotovo(new FormData(f))});
+    var f=pk.querySelector("[data-form]");if(f)f.addEventListener("submit",function(e){e.preventDefault();hotovo(new FormData(f),f.querySelector('button[type=submit]'))});
   };
-  function hotovo(fd){
-    krok=4;var c="2026"+String(Math.floor(1000+Math.random()*8999)),sp=spolu()+poplatky();
-    var ob=citaj("eshop:"+E.slug+":objednavky",[]);ob.unshift({c:c,m:fd.get("meno"),e:fd.get("email"),s:sp,d:new Date().toISOString(),pol:K.slice()});uloz("eshop:"+E.slug+":objednavky",ob.slice(0,20));
-    pk.innerHTML='<div class="hotovo"><div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
-      '<h1>Ďakujeme, objednávka č. '+c+' je prijatá</h1><p>Takto to uvidí Váš zákazník. Zároveň mu odíde potvrdenie e-mailom a Vám sa objednávka objaví v administrácii.</p>'+
-      '<div class="mail"><div class="mail-h">Od: '+esc(E.nazov)+' &lt;'+esc(E.email)+'&gt;<br>Predmet: Potvrdenie objednávky č. '+c+'</div><div class="mail-t">Dobrý deň, '+esc(String(fd.get("meno")).split(" ")[0])+',<br><br>ďakujeme za objednávku v obchode <b>'+esc(E.nazov)+'</b>. '+
-      'Objednali ste '+kusov()+' ks tovaru v hodnote <b>'+eur(sp)+'</b>, doprava: '+DOP[vol.d][0].toLowerCase()+', platba: '+PLA[vol.pl][0].toLowerCase()+'.<br><br>O odoslaní Vás budeme informovať ďalším e-mailom.<br><br>S pozdravom<br>'+esc(E.nazov)+(E.telefon?'<br>'+esc(E.telefon):'')+'</div></div>'+
-      '<p class="pozn" style="margin-top:22px">Ukážka: objednávka sa z návrhu nikam neodoslala. <a class="odk" href="'+PRE+'admin/">Pozrite si ju v ukážke administrácie</a></p></div>';
-    K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
+  var T0=Date.now(),API="https://webhunter-admin.webhunter.workers.dev/api/knihy-mikula/order";
+  function chyba(f,t){var e=f.querySelector(".chyba");if(!e){e=document.createElement("p");e.className="chyba";e.setAttribute("role","alert");e.style.cssText="color:#b3261e;margin:12px 0 0";f.appendChild(e)}e.textContent=t}
+  function hotovo(fd,btn){
+    var f=btn.form,sp=Math.round((spolu()+(DOP[vol.d][2]||0))*100)/100;btn.disabled=true;var tx=btn.textContent;btn.textContent="Odosielam…";
+    var body={items:K.map(function(x){return{id:x.id,q:x.q}}),ship:vol.d,total:DOP[vol.d][2]===null?undefined:sp,agree:!!fd.get("agree"),hp:fd.get("hp")||"",ms:Date.now()-T0,
+      customer:{name:fd.get("meno"),email:fd.get("email"),phone:fd.get("tel"),street:fd.get("ulica"),city:fd.get("mesto"),zip:fd.get("psc"),note:fd.get("pozn")}};
+    if(body.total===undefined)delete body.total;
+    fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})}).then(function(x){
+      if(!x.ok){btn.disabled=false;btn.textContent=tx;chyba(f,x.j.error||x.j.message||"Objednávku sa nepodarilo odoslať. Skúste to prosím znova alebo nám napíšte na "+E.email+".");return}
+      var j=x.j,p=j.pay;krok=4;
+      pk.innerHTML='<div class="hotovo"><div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+        '<h1>Ďakujeme, objednávka č. '+esc(j.num)+' je prijatá</h1>'+(j.test?'<p><b>Skúšobná prevádzka:</b> objednávka nebude vybavená, nič neplaťte.</p>':'')+
+        '<p>Potvrdenie sme poslali na '+esc(String(fd.get("email")))+'.</p>'+
+        (p?'<div class="qrp" style="max-width:200px;margin:18px auto">'+p.qr+'</div><p><b>Platba prevodom</b><br>IBAN: '+esc(p.iban_f)+'<br>Suma: '+eur(p.amount)+(j.ship&&j.ship.tbd?' (tovar, bez dopravy)':'')+'<br>Variabilný symbol: '+esc(p.vs)+'</p>':'<p>Platobné údaje Vám pošleme e-mailom.</p>')+
+        (j.ship&&j.ship.tbd?'<p>Cenu dopravy Vám potvrdíme e-mailom.</p>':'')+'<p style="margin-top:28px"><a class="bt" href="'+PRE+'">Späť do obchodu</a></p></div>';
+      K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
+    }).catch(function(){btn.disabled=false;btn.textContent=tx;chyba(f,"Spojenie sa nepodarilo. Skúste to prosím znova.")});
   }
 }
 kresli();

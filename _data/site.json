@@ -3,7 +3,7 @@
   "nazev": "Knihy Mikula",
   "url": "https://webhunter-navrhy.github.io/knihy-mikula/",
   "base": "/knihy-mikula/",
-  "lang": "cs",
+  "lang": "sk",
   "popis": "Krátký popis firmy pro Google a sdílení (120–160 znaků, konkrétně: co, kde, pro koho).",
   "navrh": true,
   "domena": "",
@@ -13,13 +13,13 @@
   "typ": "LocalBusiness",
   "ico": "",
   "kontakt": {
-    "email": "",
-    "telefon": "",
+    "email": "mikula@knihy-mikula.sk",
+    "telefon": "+421 905 150 416",
     "adresa": {
-      "ulice": "",
-      "psc": "",
-      "mesto": "",
-      "zeme": "CZ"
+      "ulice": "Nám. Hraničiarov 35",
+      "psc": "851 03",
+      "mesto": "Bratislava",
+      "zeme": "SK"
     }
   },
   "oteviraci_doba": [],
@@ -39,5 +39,6 @@
       "text": "Kontakt",
       "href": "#kontakt"
     }
-  ]
+  ],
+  "provozovatel": "MIKULA s.r.o."
 }

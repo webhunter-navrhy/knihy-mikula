@@ -1,0 +1,314 @@
+[
+ {
+  "id": "p2",
+  "n": "Taliančina pre deti",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p3",
+  "n": "Slovíčkareň – 500 najdôležitejších nemeckých slovíčok",
+  "c": 12.9,
+  "skladom": true
+ },
+ {
+  "id": "p4",
+  "n": "Anglicko-slovenský a slovensko-anglický slovník – 2. vydanie",
+  "c": 6.0,
+  "skladom": true
+ },
+ {
+  "id": "p6",
+  "n": "Slovenské frazémy v cudzích jazykoch",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p8",
+  "n": "Anglicko-slovenský slovník – idiomatické väzby a ustálené spojenia",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p11",
+  "n": "Taliančina Krok za krokom + CD",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p12",
+  "n": "Angličtina na cesty",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p14",
+  "n": "Slovíčkareň – Cat Riston + CD – nemčina",
+  "c": 12.9,
+  "skladom": true
+ },
+ {
+  "id": "p15",
+  "n": "Malý nemecko-slovenský a slovensko-nemecký slovník",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p19",
+  "n": "Veľký taliansko-slovenský frazeologický slovník",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p20",
+  "n": "Slovník cudzích slov -3. vyd.",
+  "c": 14.9,
+  "skladom": true
+ },
+ {
+  "id": "p23",
+  "n": "Kľúč do sveta – Francúzština",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p24",
+  "n": "Moderná učebnica angličtiny pre všetkých (ne)náročných",
+  "c": 10.0,
+  "skladom": true
+ },
+ {
+  "id": "p25",
+  "n": "LEXIMAPPING – na ceste za úspechom",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p26",
+  "n": "Slovenský národný korpus Používanie, príklady, postupy",
+  "c": 8.0,
+  "skladom": true
+ },
+ {
+  "id": "p28",
+  "n": "Taliansko-slovenský slovník",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p29",
+  "n": "Profesný nemecko-slovenský a slovensko-nemecký slovník – gastronómia",
+  "c": 8.0,
+  "skladom": true
+ },
+ {
+  "id": "p30",
+  "n": "Nemecko-slovenský stavebný slovník",
+  "c": 15.0,
+  "skladom": true
+ },
+ {
+  "id": "p31",
+  "n": "Slovník anglických vlastných mien v slovenčine",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p32",
+  "n": "Skloňovanie podstatných mien v slovenčine s korpusovými príkladmi",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p33",
+  "n": "Španielsko-slovenský a slovensko-španielsky frazeologický slovník",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p34",
+  "n": "Malý rusko-slovenský a slovensko-ruský slovník",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p37",
+  "n": "Taliančina na cesty",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p38",
+  "n": "Kľúč do sveta – Maďarčina",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p39",
+  "n": "Angličtina v témach – od maturity po štátnice",
+  "c": 6.0,
+  "skladom": true
+ },
+ {
+  "id": "p43",
+  "n": "Moderný nemecko-slovenský a slovensko-nemecký slovník",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p46",
+  "n": "Talianska gramatika",
+  "c": 5.0,
+  "skladom": true
+ },
+ {
+  "id": "p47",
+  "n": "Kľúč do sveta – sada",
+  "c": 10.0,
+  "skladom": true
+ },
+ {
+  "id": "p48",
+  "n": "Časovanie slovies v slovenčine",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p49",
+  "n": "Latinsko-slovenský slovník",
+  "c": 19.0,
+  "skladom": true
+ },
+ {
+  "id": "p50",
+  "n": "Česko-slovenský a slovensko-český slovník",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p51",
+  "n": "Kľúč do sveta – Švédčina",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p52",
+  "n": "Kľúč do sveta – Rumunčina – 2. vydanie",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p53",
+  "n": "Kľúč do sveta – Poľština",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p54",
+  "n": "Kľúč do sveta – Chorvátčina – 2. vydanie",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p55",
+  "n": "Kľúč do sveta – Bulharčina",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p56",
+  "n": "Kľúč do sveta – Angličtina – 2. vydanie",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p57",
+  "n": "Kľúč do sveta – Ruština",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p58",
+  "n": "Taliančina krok za krokom 2 + CD",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p59",
+  "n": "Moderná gramatika španielčiny s cvičeniami",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p60",
+  "n": "Slovenský národný korpus Texty, anotácie, vyhľadávania",
+  "c": 8.0,
+  "skladom": true
+ },
+ {
+  "id": "p61",
+  "n": "Malý slovník cudzích slov – 2. vydanie",
+  "c": 4.0,
+  "skladom": true
+ },
+ {
+  "id": "p62",
+  "n": "Slovensko-taliansky slovník",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p63",
+  "n": "Španielsko-slovenský a slovensko-španielsky vreckový slovník – 3. vydanie",
+  "c": 7.0,
+  "skladom": true
+ },
+ {
+  "id": "p64",
+  "n": "Španielsko-slovenský slovník",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p65",
+  "n": "Francúzsko-slovenský slovník – diplomacia, medzinárodné právo a politológia",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p66",
+  "n": "Francúzsko-slovenský a slovensko-francúzsky vreckový slovník",
+  "c": 5.0,
+  "skladom": true
+ },
+ {
+  "id": "p67",
+  "n": "Francúzsko-slovenský a slovensko-francúzsky slovník",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p68",
+  "n": "Anglicko-slovenský/slovensko-anglický slovník termínov internetu",
+  "c": 2.0,
+  "skladom": true
+ },
+ {
+  "id": "p69",
+  "n": "Malý anglicko-slovenský a slovensko-anglický slovník",
+  "c": 3.0,
+  "skladom": true
+ },
+ {
+  "id": "p70",
+  "n": "Anglicko-slovenský/slovensko-anglický slovník 55 000 hesiel – 2. vydanie",
+  "c": 9.0,
+  "skladom": true
+ },
+ {
+  "id": "p71",
+  "n": "Česko-slovenský a slovensko-český diferenčný slovník",
+  "c": 8.0,
+  "skladom": true
+ }
+]

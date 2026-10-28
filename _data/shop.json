@@ -1,0 +1,17 @@
+{
+ "bank": {
+  "iban": "SK2111000000002628832434",
+  "name": "MIKULA s.r.o."
+ },
+ "due_days": 7,
+ "shipping": [
+  {
+   "id": "adresa",
+   "name": "Doručenie na adresu",
+   "note": "Cena dopravy podľa cenníka obchodu",
+   "price": null,
+   "address": true,
+   "active": true
+  }
+ ]
+}

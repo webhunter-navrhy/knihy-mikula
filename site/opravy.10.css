@@ -70,3 +70,6 @@ main p,main h1,main h2,main h3,main dd,footer p,footer a{overflow-wrap:anywhere}
 .po-hf img{max-width:440px;width:100%;height:auto;margin-inline:auto;display:block}
 .kr-t>a{display:inline-block;min-height:44px}
 .logo{min-height:44px;display:inline-flex;align-items:center}
+
+/* 28. 10.: bez bočného panela s kategóriami (želanie klienta), jazyk sa volí v menu */
+.vp{grid-template-columns:minmax(0,1fr)!important}.vp>.fl,.fl-btn{display:none!important}

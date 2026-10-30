@@ -310,5 +310,29 @@
   "n": "Česko-slovenský a slovensko-český diferenčný slovník",
   "c": 8.0,
   "skladom": true
+ },
+ {
+  "id": "p72",
+  "n": "Angličtina pre samoukov",
+  "c": 23.9,
+  "skladom": true
+ },
+ {
+  "id": "p73",
+  "n": "Španielčina komplet",
+  "c": 20.9,
+  "skladom": true
+ },
+ {
+  "id": "p74",
+  "n": "Nemčina do práce",
+  "c": 28.9,
+  "skladom": true
+ },
+ {
+  "id": "p75",
+  "n": "Taliančina od nuly",
+  "c": 21.9,
+  "skladom": true
  }
 ]

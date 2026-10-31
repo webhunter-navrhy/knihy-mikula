@@ -114,7 +114,7 @@ if(pk){
   /* doprava a platby z ich súčasných podmienok (data.js E.dop / E.pla); cena null = podľa ich cenníka */
   if(E.dop&&E.dop.length){DOP={};E.dop.forEach(function(x){DOP[x[0]]=[x[1],x[2],x[3],x[4],x[5]]});vol.d=E.dop[0][0]}
   if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(PLA.dobierka)PLA.dobierka[2]=null}
-  function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){return s+x.q*0.3},0);c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
+  function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){var pr=(E.produkty||[]).filter(function(y){return y.id==x.id})[0];return s+x.q*((pr&&pr.w)||0.3)},0);c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
   function poplatky(){return (cd()||0)+(PLA[vol.pl][2]||0)}
   function neznama(){return DOP[vol.d][2]===null||PLA[vol.pl][2]===null}
   function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+

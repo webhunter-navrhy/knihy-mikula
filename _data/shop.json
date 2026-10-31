@@ -6,6 +6,33 @@
  "due_days": 7,
  "shipping": [
   {
+   "id": "paketa",
+   "name": "Paketa",
+   "note": "Do 2 kg 3,50 €, 2–5 kg 3,90 €, 5–10 kg 4,90 €, do 50 kg 5 €; nad 50 € zadarmo",
+   "price": 3.5,
+   "tiers": [
+    {
+     "max": 2,
+     "price": 3.5
+    },
+    {
+     "max": 5,
+     "price": 3.9
+    },
+    {
+     "max": 10,
+     "price": 4.9
+    },
+    {
+     "max": 50,
+     "price": 5.0
+    }
+   ],
+   "free_from": 50,
+   "address": true,
+   "active": true
+  },
+  {
    "id": "posta",
    "name": "Slovenská pošta – balík",
    "note": "Do 2 kg 5 €, 2–10 kg 6 €",

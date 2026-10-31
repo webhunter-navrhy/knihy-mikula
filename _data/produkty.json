@@ -326,27 +326,27 @@
   "n": "Angličtina pre samoukov",
   "c": 23.9,
   "skladom": true,
-  "w": 0.9
+  "w": 1.7
  },
  {
   "id": "p73",
   "n": "Španielčina komplet",
   "c": 20.9,
   "skladom": true,
-  "w": 2.6
+  "w": 2.9
  },
  {
   "id": "p74",
   "n": "Nemčina do práce",
   "c": 28.9,
   "skladom": true,
-  "w": 1.4
+  "w": 1.7
  },
  {
   "id": "p75",
   "n": "Taliančina od nuly",
   "c": 21.9,
   "skladom": true,
-  "w": 0.9
+  "w": 1.1
  }
 ]

@@ -112,9 +112,10 @@ if(pk){
   var DOP={kurier:["Kuriér na adresu","Doručenie do 1–2 pracovných dní",4.9],box:["Výdajné miesto alebo Z-BOX","Vyzdvihnete, keď sa Vám to hodí",2.9],osobne:["Osobný odber","Na našej adrese "+(E.mesto||""),0]};
   var PLA={karta:["Platba kartou cez Stripe","Visa, Mastercard, Maestro, bezpečne cez platobnú bránu Stripe",0],apple:["Apple Pay / Google Pay","Cez Stripe, rýchla platba telefónom",0],prevod:["Bankový prevod","Údaje a QR kód dostanete hneď po objednávke",0],dobierka:["Dobierka","Platba pri prevzatí",1.5]};
   /* doprava a platby z ich súčasných podmienok (data.js E.dop / E.pla); cena null = podľa ich cenníka */
-  if(E.dop&&E.dop.length){DOP={};E.dop.forEach(function(x){DOP[x[0]]=[x[1],x[2],x[3]]});vol.d=E.dop[0][0]}
+  if(E.dop&&E.dop.length){DOP={};E.dop.forEach(function(x){DOP[x[0]]=[x[1],x[2],x[3],x[4],x[5]]});vol.d=E.dop[0][0]}
   if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(PLA.dobierka)PLA.dobierka[2]=null}
-  function poplatky(){return (DOP[vol.d][2]||0)+(PLA[vol.pl][2]||0)}
+  function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){return s+x.q*0.3},0);c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
+  function poplatky(){return (cd()||0)+(PLA[vol.pl][2]||0)}
   function neznama(){return DOP[vol.d][2]===null||PLA[vol.pl][2]===null}
   function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+
     '<div class="rd" style="margin-top:10px"><span>Tovar</span><span>'+eur(spolu())+'</span></div><div class="rd"><span>Doprava a platba</span><span>'+(neznama()?"podľa cenníka":poplatky()?eur(poplatky()):"zadarmo")+'</span></div>'+
@@ -140,7 +141,7 @@ if(pk){
   var T0=Date.now(),API="https://webhunter-admin.webhunter.workers.dev/api/knihy-mikula/order";
   function chyba(f,t){var e=f.querySelector(".chyba");if(!e){e=document.createElement("p");e.className="chyba";e.setAttribute("role","alert");e.style.cssText="color:#b3261e;margin:12px 0 0";f.appendChild(e)}e.textContent=t}
   function hotovo(fd,btn){
-    var f=btn.form,sp=Math.round((spolu()+(DOP[vol.d][2]||0))*100)/100;btn.disabled=true;var tx=btn.textContent;btn.textContent="Odosielam…";
+    var f=btn.form,sp=Math.round((spolu()+(cd()||0))*100)/100;btn.disabled=true;var tx=btn.textContent;btn.textContent="Odosielam…";
     var body={items:K.map(function(x){return{id:x.id,q:x.q}}),ship:vol.d,total:DOP[vol.d][2]===null?undefined:sp,agree:!!fd.get("agree"),hp:fd.get("hp")||"",ms:Date.now()-T0,
       customer:{name:fd.get("meno"),email:fd.get("email"),phone:fd.get("tel"),street:fd.get("ulica"),city:fd.get("mesto"),zip:fd.get("psc"),note:fd.get("pozn")}};
     if(body.total===undefined)delete body.total;

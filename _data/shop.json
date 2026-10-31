@@ -6,12 +6,33 @@
  "due_days": 7,
  "shipping": [
   {
-   "id": "adresa",
-   "name": "Doručenie na adresu",
-   "note": "Cena dopravy podľa cenníka obchodu",
-   "price": null,
+   "id": "posta",
+   "name": "Slovenská pošta – balík",
+   "note": "Do 2 kg 5 €, 2–10 kg 6 €",
+   "price": 5,
+   "tiers": [
+    {
+     "max": 2,
+     "price": 5
+    },
+    {
+     "max": 10,
+     "price": 6
+    }
+   ],
+   "free_from": 50,
+   "address": true,
+   "active": true
+  },
+  {
+   "id": "kurier",
+   "name": "Expresný kuriér",
+   "note": "",
+   "price": 9,
+   "free_from": 50,
    "address": true,
    "active": true
   }
- ]
+ ],
+ "default_weight": 0.3
 }

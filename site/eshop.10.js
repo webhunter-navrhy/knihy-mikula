@@ -9,6 +9,10 @@ function citaj(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null
 var A=citaj(KA,{}),U=A.produkty||{};
 var P={};E.produkty.forEach(function(p){var u=U[p.id];if(u){if(u.c)p.c=+u.c;if(u.n)p.n=u.n;if(u.skryt)p.skryt=1}P[p.id]=p});
 function eur(x){var s=(Math.round(x*100)/100).toFixed(2).split("."),c=s[0].replace(/\B(?=(\d{3})+(?!\d))/g," ");return c+","+s[1]+" €"}
+/* GA4 ecommerce -> dataLayer (GTM) */
+window.dataLayer=window.dataLayer||[];
+function gi(id,q,i){var p=P[id];if(!p)return null;var o={item_id:String(p.id),item_name:p.n,price:p.c,quantity:q||1};if(p.kn)o.item_category=p.kn;if(i!=null)o.index=i;return o}
+function ge(ev,items,extra){try{var it=items.filter(Boolean),v=0;it.forEach(function(x){v+=x.price*x.quantity});var e={currency:"EUR",value:Math.round(v*100)/100,items:it};for(var k in extra||{})e[k]=extra[k];window.dataLayer.push({ecommerce:null});window.dataLayer.push({event:ev,ecommerce:e})}catch(x){}}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function foto(f){return /^https?:/.test(f)?f:PRE+f}
 document.querySelectorAll("[data-cena-id]").forEach(function(el){var p=P[el.getAttribute("data-cena-id")];if(p&&U[p.id]&&U[p.id].c)el.firstChild.nodeValue=eur(p.c)});
@@ -31,8 +35,8 @@ var K=citaj(KK,[]).filter(function(x){return P[x.id]});
 function ulozK(){uloz(KK,K);kresli()}
 function spolu(){return K.reduce(function(s,x){return s+P[x.id].c*x.q},0)}
 function kusov(){return K.reduce(function(s,x){return s+x.q},0)}
-function pridaj(id,q){q=q||1;var x=K.find(function(x){return x.id===id});if(x)x.q+=q;else K.push({id:id,q:q});ulozK();otvor()}
-function zmen(id,q){var x=K.find(function(x){return x.id===id});if(!x)return;x.q=Math.max(0,q);if(!x.q)K=K.filter(function(y){return y!==x});ulozK()}
+function pridaj(id,q){q=q||1;ge("add_to_cart",[gi(id,q)]);var x=K.find(function(x){return x.id===id});if(x)x.q+=q;else K.push({id:id,q:q});ulozK();otvor()}
+function zmen(id,q){var x=K.find(function(x){return x.id===id});if(!x)return;if(q<x.q)ge("remove_from_cart",[gi(id,x.q-Math.max(0,q))]);x.q=Math.max(0,q);if(!x.q)K=K.filter(function(y){return y!==x});ulozK()}
 var kp=document.createElement("aside");kp.className="kp";kp.setAttribute("aria-label","Košík");
 kp.innerHTML='<div class="kp-h"><h2>Košík</h2><button class="ik" data-zavri aria-label="Zavrieť"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="kp-p"></div><div class="kp-s"></div>';
 var kz=document.createElement("div");kz.className="kp-pozadie";B.appendChild(kp);B.appendChild(kz);
@@ -103,7 +107,10 @@ if(mriezka){
   var fb=document.querySelector(".fl-btn");if(fb)fb.addEventListener("click",function(){fl.classList.add("o")});
   document.querySelectorAll(".fl-zavri").forEach(function(b){b.addEventListener("click",function(){fl.classList.remove("o")})});
   filtruj();
+  (function(){var v=karty.filter(function(k){return !k.hidden}).slice(0,24).map(function(k,i){return gi(k.getAttribute("data-id"),1,i)});ge("view_item_list",v,{item_list_name:"Produkty"})})();
 }
+
+var vd=document.querySelector("button[data-pridaj][data-s-mn]");if(vd)ge("view_item",[gi(vd.getAttribute("data-pridaj"),1)]);
 
 /* pokladňa (ukážka): košík -> doprava a platba -> údaje -> potvrdenie s ukážkou e-mailu */
 var pk=document.querySelector("[data-pokladna]");
@@ -134,10 +141,22 @@ if(pk){
       '<input name="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0"><label class="suhlas"><input type="checkbox" name="agree" required> <span>Súhlasím s <a class="odk" href="'+PRE+'obchodne-podmienky/">obchodnými podmienkami</a> a beriem na vedomie <a class="odk" href="'+PRE+'ochrana-osobnych-udajov/">spracúvanie osobných údajov</a>.</span></label>'+
       '<button class="bt" type="submit">Objednať s povinnosťou platby</button></form>';
     h+='</div>'+suhrn()+'</div>';pk.innerHTML=h;
-    var d=pk.querySelector("[data-dalej]");if(d)d.addEventListener("click",function(){krok++;window.__pokladna();scrollTo(0,0)});
+    if(krok===1&&K.length&&vol.vk!==1){vol.vk=1;ge("view_cart",K.map(function(x){return gi(x.id,x.q)}))}
+    if(krok===2&&vol.d==="paketa"){var pb=document.createElement("div");pb.className="pkt";pb.style.cssText="margin:14px 0 4px";pb.innerHTML='<button type="button" class="bt sv" data-pkt>'+(vol.pp?"Zmeniť výdajné miesto":"Vybrať výdajné miesto")+'</button><p data-pktn style="margin:10px 0 0">'+(vol.pp?"Vybrané: <b>"+esc(vol.pp.name)+"</b>, "+esc(vol.pp.street||"")+" "+esc(vol.pp.city||""):"Vyberte, kde si zásielku vyzdvihnete.")+'</p>';var h2=pk.querySelectorAll("h2")[1];h2.parentNode.insertBefore(pb,h2);pb.querySelector("[data-pkt]").addEventListener("click",pktOtvor)}
+    var d=pk.querySelector("[data-dalej]");if(d)d.addEventListener("click",function(){
+      if(krok===2&&vol.d==="paketa"&&!vol.pp){var n=pk.querySelector("[data-pktn]");if(n){n.textContent="Vyberte prosím výdajné miesto Packety.";n.style.color="#b3261e"}return}
+      if(krok===1)ge("begin_checkout",K.map(function(x){return gi(x.id,x.q)}));
+      if(krok===2)ge("add_shipping_info",K.map(function(x){return gi(x.id,x.q)}),{shipping_tier:DOP[vol.d][0]});
+      krok++;window.__pokladna();scrollTo(0,0)});
     pk.querySelectorAll("input[type=radio]").forEach(function(r){r.addEventListener("change",function(){vol[r.name]=r.value;window.__pokladna()})});
     var f=pk.querySelector("[data-form]");if(f)f.addEventListener("submit",function(e){e.preventDefault();hotovo(new FormData(f),f.querySelector('button[type=submit]'))});
   };
+  function pktOtvor(){
+    var go=function(key){window.Packeta.Widget.pick(key,function(pt){if(!pt)return;vol.pp={id:pt.id,name:pt.name,city:pt.city,street:pt.street,zip:pt.zip};window.__pokladna()},{country:"sk",language:"sk",valueFormat:'"Packeta",id,carrierId,carrierPickupPointId,name,city,street,zip'})};
+    var load=function(key){if(window.Packeta&&window.Packeta.Widget)return go(key);var sc=document.createElement("script");sc.src="https://widget.packeta.com/v6/www/js/library.js";sc.onload=function(){go(key)};document.head.appendChild(sc)};
+    if(pktOtvor.k)return load(pktOtvor.k);
+    fetch(API.replace(/\/order$/,"/packeta")).then(function(r){return r.json()}).then(function(j){if(j&&j.key){pktOtvor.k=j.key;load(j.key)}}).catch(function(){var n=pk.querySelector("[data-pktn]");if(n)n.textContent="Výber výdajných miest sa nepodarilo načítať. Skúste to prosím znova."})
+  }
   var T0=Date.now(),API="https://webhunter-admin.webhunter.workers.dev/api/knihy-mikula/order";
   function chyba(f,t){var e=f.querySelector(".chyba");if(!e){e=document.createElement("p");e.className="chyba";e.setAttribute("role","alert");e.style.cssText="color:#b3261e;margin:12px 0 0";f.appendChild(e)}e.textContent=t}
   function hotovo(fd,btn){
@@ -145,6 +164,8 @@ if(pk){
     var body={items:K.map(function(x){return{id:x.id,q:x.q}}),ship:vol.d,total:DOP[vol.d][2]===null?undefined:sp,agree:!!fd.get("agree"),hp:fd.get("hp")||"",ms:Date.now()-T0,
       customer:{name:fd.get("meno"),email:fd.get("email"),phone:fd.get("tel"),street:fd.get("ulica"),city:fd.get("mesto"),zip:fd.get("psc"),note:fd.get("pozn")}};
     if(body.total===undefined)delete body.total;
+    if(vol.d==="paketa"&&vol.pp)body.pickup=vol.pp;
+    var snap=K.map(function(x){return gi(x.id,x.q)});
     fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})}).then(function(x){
       if(!x.ok){btn.disabled=false;btn.textContent=tx;chyba(f,x.j.error||x.j.message||"Objednávku sa nepodarilo odoslať. Skúste to prosím znova alebo nám napíšte na "+E.email+".");return}
       var j=x.j,p=j.pay;krok=4;
@@ -153,6 +174,7 @@ if(pk){
         '<p>Potvrdenie sme poslali na '+esc(String(fd.get("email")))+'.</p>'+
         (p?'<div class="qrp" style="max-width:200px;margin:18px auto">'+p.qr+'</div><p><b>Platba prevodom</b><br>IBAN: '+esc(p.iban_f)+'<br>Suma: '+eur(p.amount)+(j.ship&&j.ship.tbd?' (tovar, bez dopravy)':'')+'<br>Variabilný symbol: '+esc(p.vs)+'</p>':'<p>Platobné údaje Vám pošleme e-mailom.</p>')+
         (j.ship&&j.ship.tbd?'<p>Cenu dopravy Vám potvrdíme e-mailom.</p>':'')+'<p style="margin-top:28px"><a class="bt" href="'+PRE+'">Späť do obchodu</a></p></div>';
+      ge("purchase",snap,{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});
       K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
     }).catch(function(){btn.disabled=false;btn.textContent=tx;chyba(f,"Spojenie sa nepodarilo. Skúste to prosím znova.")});
   }

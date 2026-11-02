@@ -61,7 +61,9 @@ function detail(num,M){
       '<p style="margin-top:10px;font-size:13.5px;color:var(--muted)">Platba prevodom, variabilný symbol '+esc(o.num)+'</p>'+
       '<label style="margin-top:16px">Stav<select data-st>'+Object.keys(STAVY).map(function(k){return '<option value="'+k+'"'+(k===o.status?" selected":"")+'>'+esc(STAVY[k])+'</option>'}).join("")+'</select></label>'+
       '<label>Interná poznámka<textarea data-pz rows="3">'+esc(o.note||"")+'</textarea></label><p class="chyba" role="alert" style="color:#b3261e"></p>'+
-      '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="bt" data-uloz>Uložiť</button><button class="bt sv" data-zavri>Zavrieť</button></div>',function(m){
+      '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="bt" data-uloz>Uložiť</button><button class="bt sv" data-zavri>Zavrieť</button>'+((o.ship||{}).pickup?'<button class="bt sv" data-stitok>'+((o.packeta||{}).id?"Stiahnuť štítok Packeta":"Vytvoriť štítok Packeta")+'</button>':"")+'</div>',function(m){
+        var sb=m.querySelector("[data-stitok]");if(sb)sb.addEventListener("click",function(){var b=this;b.disabled=true;m.querySelector(".chyba").textContent="";
+          api("packeta",{num:o.num}).then(function(j){var bin=atob(j.pdf),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);var url=URL.createObjectURL(new Blob([u],{type:"application/pdf"}));window.open(url,"_blank");b.disabled=false;b.textContent="Stiahnuť štítok Packeta"}).catch(function(x){m.querySelector(".chyba").textContent=x.message;b.disabled=false})});
         m.querySelector("[data-uloz]").addEventListener("click",function(){var b=this;b.disabled=true;
           api("orders",{num:o.num,status:m.querySelector("[data-st]").value,note:m.querySelector("[data-pz]").value}).then(function(){m.remove();objednavky(M)}).catch(function(x){m.querySelector(".chyba").textContent=x.message;b.disabled=false})})});
   }).catch(function(x){alert(x.message)});

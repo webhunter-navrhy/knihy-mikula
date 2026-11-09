@@ -172,7 +172,7 @@ if(pk){
       pk.innerHTML='<div class="hotovo"><div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
         '<h1>Ďakujeme, objednávka č. '+esc(j.num)+' je prijatá</h1>'+(j.test?'<p><b>Skúšobná prevádzka:</b> objednávka nebude vybavená, nič neplaťte.</p>':'')+
         '<p>Potvrdenie sme poslali na '+esc(String(fd.get("email")))+'.</p>'+
-        (p?'<div class="qrp" style="max-width:200px;margin:18px auto">'+p.qr+'</div><p><b>Platba prevodom</b><br>IBAN: '+esc(p.iban_f)+'<br>Suma: '+eur(p.amount)+(j.ship&&j.ship.tbd?' (tovar, bez dopravy)':'')+'<br>Variabilný symbol: '+esc(p.vs)+'</p>':'<p>Platobné údaje Vám pošleme e-mailom.</p>')+
+        (p?'<div class="qrp" style="max-width:260px;margin:18px auto;background:#fff;padding:8px;border-radius:8px">'+p.qr+'</div><p style="font-size:13px;opacity:.8">QR kód naskenujte v bankovej aplikácii z iného zariadenia. Ak objednávate z mobilu, zadajte údaje nižšie ručne (pošleme ich aj e-mailom).</p><p><b>Platba prevodom</b><br>IBAN: '+esc(p.iban_f)+'<br>Suma: '+eur(p.amount)+(j.ship&&j.ship.tbd?' (tovar, bez dopravy)':'')+'<br>Variabilný symbol: '+esc(p.vs)+'</p>':'<p>Platobné údaje Vám pošleme e-mailom.</p>')+
         (j.ship&&j.ship.tbd?'<p>Cenu dopravy Vám potvrdíme e-mailom.</p>':'')+'<p style="margin-top:28px"><a class="bt" href="'+PRE+'">Späť do obchodu</a></p></div>';
       ge("purchase",snap,{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});
       K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);

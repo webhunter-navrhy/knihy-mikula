@@ -348,5 +348,19 @@
   "c": 21.9,
   "skladom": true,
   "w": 1.1
+ },
+ {
+  "id": "p76",
+  "n": "Angličtina v témach",
+  "c": 11.0,
+  "skladom": true,
+  "w": 2.0
+ },
+ {
+  "id": "p77",
+  "n": "Balíček do každej školy",
+  "c": 32.0,
+  "skladom": true,
+  "w": 3.5
  }
 ]

@@ -44,7 +44,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.02em}
 .tab .n{max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .obal{overflow-x:auto;margin:0 -20px;padding:0 20px}
 .st{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12.5px;font-weight:500;white-space:nowrap}
-.st-nova{background:#e8f0ff;color:#1f4fbf}.st-zapl{background:#e6f4ec;color:var(--ok)}.st-odosl{background:#f1eefc;color:#5b3fb5}.st-dor{background:#efefec;color:var(--soft)}.st-zrus{background:#fdecea;color:#b3261e}
+.st-nova{background:#fff3d6;color:#8a5a00}.st-zaplacena{background:#e0f0ff;color:#0b4f8a}.st-pripravena{background:#f1eefc;color:#5b3fb5}.st-vyrizena{background:#e2f5e9;color:#17703a}.st-zrusena{background:#fdecea;color:#b3261e}
 .pruh{display:grid;grid-template-columns:minmax(0,1fr) 120px 70px;gap:12px;align-items:center;padding:7px 0;font-size:14px}
 .pruh .b{height:8px;border-radius:4px;background:var(--bg);overflow:hidden}.pruh .b span{display:block;height:100%;background:var(--a)}
 .pruh .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

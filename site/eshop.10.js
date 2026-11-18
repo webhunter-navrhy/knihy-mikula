@@ -157,13 +157,14 @@ if(pk){
     if(pktOtvor.k)return load(pktOtvor.k);
     fetch(API.replace(/\/order$/,"/packeta")).then(function(r){return r.json()}).then(function(j){if(j&&j.key){pktOtvor.k=j.key;load(j.key)}}).catch(function(){var n=pk.querySelector("[data-pktn]");if(n)n.textContent="Výber výdajných miest sa nepodarilo načítať. Skúste to prosím znova."})
   }
-  var T0=Date.now(),API="https://webhunter-admin.webhunter.workers.dev/api/knihy-mikula/order";
+  var KEY0=Date.now().toString(36)+Math.random().toString(36).slice(2,10),T0=Date.now(),API="https://webhunter-admin.webhunter.workers.dev/api/knihy-mikula/order";
   function chyba(f,t){var e=f.querySelector(".chyba");if(!e){e=document.createElement("p");e.className="chyba";e.setAttribute("role","alert");e.style.cssText="color:#b3261e;margin:12px 0 0";f.appendChild(e)}e.textContent=t}
   function hotovo(fd,btn){
     var f=btn.form,sp=Math.round((spolu()+(cd()||0))*100)/100;btn.disabled=true;var tx=btn.textContent;btn.textContent="Odosielam…";
     var body={items:K.map(function(x){return{id:x.id,q:x.q}}),ship:vol.d,total:DOP[vol.d][2]===null?undefined:sp,agree:!!fd.get("agree"),hp:fd.get("hp")||"",ms:Date.now()-T0,
       customer:{name:fd.get("meno"),email:fd.get("email"),phone:fd.get("tel"),street:fd.get("ulica"),city:fd.get("mesto"),zip:fd.get("psc"),note:fd.get("pozn")}};
     if(body.total===undefined)delete body.total;
+    (function(){var h=0,t=JSON.stringify([body.items,body.ship,body.customer.email]);for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;body.key=KEY0+"-"+(h>>>0).toString(36)})();
     if(vol.d==="paketa"&&vol.pp)body.pickup=vol.pp;
     var snap=K.map(function(x){return gi(x.id,x.q)});
     fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})}).then(function(x){
@@ -184,7 +185,7 @@ if(pk){
       pk.querySelectorAll(".kop").forEach(function(b){b.addEventListener("click",function(){var v=b.previousElementSibling?b.previousElementSibling.lastChild.textContent:"";v=b.parentNode.querySelector("div div:last-child").textContent;if(b.getAttribute("data-k")==="iban")v=v.replace(/\\s/g,"");if(b.getAttribute("data-k")==="suma")v=v.replace(/[^0-9,]/g,"");var ok=function(){b.textContent="Skopírované ✓"};if(navigator.clipboard)navigator.clipboard.writeText(v).then(ok,ok);else ok()})});
       ge("purchase",snap,{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});
       K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
-    }).catch(function(){btn.disabled=false;btn.textContent=tx;chyba(f,"Spojenie sa nepodarilo. Skúste to prosím znova.")});
+    }).catch(function(){btn.disabled=false;btn.textContent=tx;chyba(f,"Spojenie sa prerušilo. Objednávka mohla byť prijatá – skontrolujte e-mail. Ak potvrdenie nepríde, odošlite ju prosím znova, druhá objednávka sa nevytvorí.")});
   }
 }
 kresli();

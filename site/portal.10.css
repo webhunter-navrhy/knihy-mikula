@@ -351,3 +351,4 @@ main>.sk.ciara:last-child{margin-top:clamp(48px,6vw,80px)}
 .po-vy .vy{display:flex!important;overflow-x:auto;scrollbar-width:none;gap:20px}.po-vy .vy>div{flex:0 0 auto;max-width:220px}.po-vy p{display:none}
 .po-vy .vy>div:last-child:nth-child(odd){grid-column:auto}}
 @media(max-width:700px){.po-mr .kr:nth-child(n+7){display:none}.po-viac{display:none}.po-viac-v{display:block}.mr{gap:22px 10px}}
+.pt .platby{align-items:center}.pt .platby .pl-lg{display:flex;gap:6px;align-items:center;border:0!important;padding:0!important}.pt .platby .pl-lg img{height:26px;width:auto;border-radius:4px;display:block}

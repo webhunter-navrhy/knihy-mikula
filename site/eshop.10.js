@@ -117,16 +117,18 @@ var pk=document.querySelector("[data-pokladna]");
 if(pk){
   var krok=1,vol={d:"kurier",pl:"prevod"};
   var DOP={kurier:["Kuriér na adresu","Doručenie do 1–2 pracovných dní",4.9],box:["Výdajné miesto alebo Z-BOX","Vyzdvihnete, keď sa Vám to hodí",2.9],osobne:["Osobný odber","Na našej adrese "+(E.mesto||""),0]};
-  var PLA={karta:["Platba kartou cez Stripe","Visa, Mastercard, Maestro, bezpečne cez platobnú bránu Stripe",0],apple:["Apple Pay / Google Pay","Cez Stripe, rýchla platba telefónom",0],prevod:["Bankový prevod","Údaje a QR kód dostanete hneď po objednávke",0],dobierka:["Dobierka","Platba pri prevzatí",1.5]};
+  var PLA={prevod:["Bankový prevod","QR kód a údaje na platbu dostanete hneď po objednávke",0],karta:["Platba kartou","Visa, Mastercard, bezpečne cez platobnú bránu Comgate",0],dobierka:["Dobierka","Platba pri prevzatí",1.5]};
   /* doprava a platby z ich súčasných podmienok (data.js E.dop / E.pla); cena null = podľa ich cenníka */
   if(E.dop&&E.dop.length){DOP={};E.dop.forEach(function(x){DOP[x[0]]=[x[1],x[2],x[3],x[4],x[5]]});vol.d=E.dop[0][0]}
-  if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(PLA.dobierka)PLA.dobierka[2]=null}
+  /* skúšobná brána Comgate: kartu ukážeme len s ?karta=1 (zapamätá sa v relácii); po ostrom spustení zmeniť KARTA_TEST na false */
+  var KARTA_TEST=true;try{if(/[?&]karta=1/.test(location.search))sessionStorage.setItem("mk_karta","1");if(KARTA_TEST&&sessionStorage.getItem("mk_karta")!=="1")delete PLA.karta}catch(e){}
+  if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(!PLA[vol.pl])vol.pl=Object.keys(PLA)[0];if(PLA.dobierka)PLA.dobierka[2]=null}
   function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){var pr=(E.produkty||[]).filter(function(y){return y.id==x.id})[0];return s+x.q*((pr&&pr.w)||0.3)},0);c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
   function poplatky(){return (cd()||0)+(PLA[vol.pl][2]||0)}
   function neznama(){return DOP[vol.d][2]===null||PLA[vol.pl][2]===null}
   function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+
     '<div class="rd" style="margin-top:10px"><span>Tovar</span><span>'+eur(spolu())+'</span></div><div class="rd"><span>Doprava a platba</span><span>'+(neznama()?"podľa cenníka":poplatky()?eur(poplatky()):"zadarmo")+'</span></div>'+
-    '<div class="rd sp"><span>'+(neznama()?"Spolu s DPH bez dopravy":"Spolu s DPH")+'</span><span>'+eur(spolu()+poplatky())+'</span></div><p class="pozn">Platba bankovým prevodom, údaje dostanete e-mailom.</p></aside>'}
+    '<div class="rd sp"><span>'+(neznama()?"Spolu s DPH bez dopravy":"Spolu s DPH")+'</span><span>'+eur(spolu()+poplatky())+'</span></div><p class="pozn">'+(vol.pl==="karta"?"Po odoslaní objednávky Vás presmerujeme na platobnú bránu Comgate.":"Platba bankovým prevodom, údaje dostanete e-mailom.")+'</p></aside>'}
   function kroky(){return '<div class="kroky">'+["Košík","Doprava a platba","Údaje","Hotovo"].map(function(t,i){return '<span class="'+(i+1===krok?"ak2":"")+'">'+(i+1)+". "+t+'</span>'}).join("")+'</div>'}
   function moznosti(meno,M,akt){return '<div class="vol">'+Object.keys(M).map(function(k){return '<label><input type="radio" name="'+meno+'" value="'+k+'"'+(k===akt?" checked":"")+'><span>'+M[k][0]+'<small>'+esc(M[k][1])+'</small></span><span>'+(M[k][2]===null?"podľa cenníka":M[k][2]?eur(M[k][2]):"zadarmo")+'</span></label>'}).join("")+'</div>'}
   window.__pokladna=function(){
@@ -166,10 +168,11 @@ if(pk){
     if(body.total===undefined)delete body.total;
     (function(){var h=0,t=JSON.stringify([body.items,body.ship,body.customer.email]);for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;body.key=KEY0+"-"+(h>>>0).toString(36)})();
     if(vol.d==="paketa"&&vol.pp)body.pickup=vol.pp;
+    if(vol.pl==="karta")body.method="karta";
     var snap=K.map(function(x){return gi(x.id,x.q)});
     fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})}).then(function(x){
       if(!x.ok){btn.disabled=false;btn.textContent=tx;chyba(f,x.j.error||x.j.message||"Objednávku sa nepodarilo odoslať. Skúste to prosím znova alebo nám napíšte na "+E.email+".");return}
-      var j=x.j,p=j.pay;krok=4;
+      var j=x.j,p=j.pay;if(j.redirect){btn.textContent="Presmerúvam na platbu…";ge("purchase",K.map(function(x){return gi(x.id,x.q)}),{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});K=[];uloz(KK,K);location.href=j.redirect;return}krok=4;
       pk.innerHTML='<div class="hotovo"><div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
         '<h1>Ďakujeme, objednávka č. '+esc(j.num)+' je prijatá</h1>'+(j.test?'<p><b>Skúšobná prevádzka:</b> objednávka nebude vybavená, nič neplaťte.</p>':'')+
         '<p>Potvrdenie sme poslali na '+esc(String(fd.get("email")))+'.</p>'+

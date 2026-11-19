@@ -1,6 +1,7 @@
 /* Linka B9: správanie šablóny e-shopu (košík, filter, galéria, pokladňa). Dáta: window.ESHOP z data.js. */
 (function(){
 "use strict";
+try{if(/[?&]karta=1/.test(location.search))sessionStorage.setItem("mk_karta","1")}catch(e){}
 var E=window.ESHOP||{produkty:[]},B=document.body,PRE=B.getAttribute("data-pre")||"./";
 var KK="eshop:"+E.slug+":kosik",KA="eshop:"+E.slug+":admin";
 function uloz(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}

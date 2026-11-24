@@ -114,3 +114,4 @@ main p,main h1,main h2,main h3,main dd,footer p,footer a{overflow-wrap:anywhere}
 .po-dt b{font-weight:800}.po-dt em{font-style:normal;font-size:1.45em;font-weight:900;color:#ffd21f;text-shadow:0 3px 0 rgba(120,10,15,.5)}
 .po-hlavny h1{max-width:14ch}.po-lead{margin-left:auto;margin-right:auto}.po-cta{justify-content:center}
 .vb{padding-top:16px;padding-bottom:8px}.vb a{display:block;border-radius:12px;overflow:hidden;line-height:0}.vb img{width:100%;height:auto;display:block}
+.vb-h{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

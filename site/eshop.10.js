@@ -33,9 +33,24 @@ function toast(t){T.textContent=t;T.classList.add("o");clearTimeout(tt);tt=setTi
 
 /* košík */
 var K=citaj(KK,[]).filter(function(x){return P[x.id]});
-function ulozK(){uloz(KK,K);kresli()}
+var KD="eshop:"+E.slug+":darceky",D=citaj(KD,{}),DC=E.darcek||{krok:30,ids:[]};
+function spoluC(){return Math.round(spolu()*100)}
+function narok(){return Math.floor(spoluC()/(DC.krok*100))}
+function dpoc(){return Object.keys(D).reduce(function(s,k){return s+D[k]},0)}
+function orez(){var n=narok(),t=dpoc(),ks=Object.keys(D);for(var i=ks.length-1;i>=0&&t>n;i--){while(D[ks[i]]>0&&t>n){D[ks[i]]--;t--}if(!D[ks[i]])delete D[ks[i]]}}
+function darPridaj(id){if(dpoc()>=narok()||!P[id])return;D[id]=(D[id]||0)+1;ulozK()}
+function darOdober(id){if(!D[id])return;D[id]--;if(!D[id])delete D[id];ulozK()}
+function darRiadky(m){return Object.keys(D).map(function(id){var p=P[id];return '<div class="pol pol-dar"><div class="f"><img src="'+esc(foto(p.f[0]))+'" alt="" loading="lazy"></div><div><a href="'+PRE+'p/'+p.s+'/">'+esc(p.n)+'</a>'+(m?'<div style="margin-top:6px"><span class="dar-sz">Kniha zdarma</span> '+(D[id]>1?'× '+D[id]+' ':'')+'<button class="zm" data-dzmaz="'+id+'">Odstrániť</button></div>':'<div style="color:var(--muted);font-size:13.5px;margin-top:4px">'+D[id]+' ks, kniha zdarma</div>')+'</div><div class="c dar-c">zadarmo</div></div>'}).join("")}
+function darSekcia(){if(!DC.ids||!DC.ids.length||!K.length)return "";var n=narok(),m=dpoc(),zost=Math.ceil((DC.krok*100-spoluC()%(DC.krok*100))/100);
+  if(!n)return '<div class="dar"><b>Kniha zdarma za každých '+DC.krok+' €</b><p>Pridajte tovar ešte za '+eur(DC.krok-spolu())+' a vyberiete si knihu zdarma.</p><a href="'+PRE+'darcekove-knihy/">Zobraziť darčekové knihy</a></div>';
+  var h='<div class="dar"><b>Kniha zdarma: máte nárok na '+n+' '+(n===1?'knihu':n<5?'knihy':'kníh')+(m?', vybrané '+m:'')+'</b>';
+  if(m<n){h+='<p>Vyberte si '+(n-m===1?'knihu':'ďalšiu knihu')+' zdarma:</p><div class="dar-m">'+DC.ids.map(function(id){var p=P[id];return '<button type="button" class="dar-k" data-dpridaj="'+id+'"><img src="'+esc(foto(p.f[0]))+'" alt="" loading="lazy"><span>'+esc(p.n)+'</span><i>Pridať zdarma</i></button>'}).join("")+'</div>'}
+  else h+='<p>Ďalšia kniha zdarma bude po nákupe ešte za '+eur(zost)+'.</p>';
+  return h+'</div>'}
+orez();
+function ulozK(){orez();uloz(KK,K);uloz(KD,D);kresli()}
 function spolu(){return K.reduce(function(s,x){return s+P[x.id].c*x.q},0)}
-function kusov(){return K.reduce(function(s,x){return s+x.q},0)}
+function kusov(){return K.reduce(function(s,x){return s+x.q},0)+dpoc()}
 function pridaj(id,q){q=q||1;ge("add_to_cart",[gi(id,q)]);var x=K.find(function(x){return x.id===id});if(x)x.q+=q;else K.push({id:id,q:q});ulozK();otvor()}
 function zmen(id,q){var x=K.find(function(x){return x.id===id});if(!x)return;if(q<x.q)ge("remove_from_cart",[gi(id,x.q-Math.max(0,q))]);x.q=Math.max(0,q);if(!x.q)K=K.filter(function(y){return y!==x});ulozK()}
 var kp=document.createElement("aside");kp.className="kp";kp.setAttribute("aria-label","Košík");
@@ -52,7 +67,7 @@ function kresli(){
   document.querySelectorAll(".pocet").forEach(function(b){var n=kusov();b.textContent=n;b.classList.toggle("je",n>0)});
   var tp=kp.querySelector(".kp-p"),ts=kp.querySelector(".kp-s");
   if(!K.length){tp.innerHTML='<p class="prazdne">Košík je zatiaľ prázdny.</p>';ts.innerHTML='<a class="bt sv pl" href="'+PRE+'produkty/">Prezrieť ponuku</a>'}
-  else{tp.innerHTML=K.map(function(x){return polozka(x,1)}).join("");
+  else{tp.innerHTML=K.map(function(x){return polozka(x,1)}).join("")+darRiadky(1)+darSekcia();
     ts.innerHTML='<div class="rd"><span>Medzisúčet</span><b>'+eur(spolu())+'</b></div><a class="bt pl" href="'+PRE+'kosik/">Pokračovať k objednávke</a><button class="bt sv pl" data-zavri2>Nakupovať ďalej</button>';
     ts.querySelector("[data-zavri2]").addEventListener("click",zavri)}
   if(window.__pokladna)window.__pokladna();
@@ -61,6 +76,8 @@ document.addEventListener("click",function(e){
   var t=e.target.closest("[data-pridaj]");
   if(t){e.preventDefault();var mi=document.querySelector("[data-mn-hl]");pridaj(t.getAttribute("data-pridaj"),mi&&t.hasAttribute("data-s-mn")?Math.max(1,parseInt(mi.value)||1):1);return}
   t=e.target.closest("[data-q]");if(t){var x=K.find(function(x){return x.id===t.getAttribute("data-id")});if(x)zmen(x.id,x.q+ +t.getAttribute("data-q"));return}
+  t=e.target.closest("[data-dpridaj]");if(t){darPridaj(t.getAttribute("data-dpridaj"));return}
+  t=e.target.closest("[data-dzmaz]");if(t){darOdober(t.getAttribute("data-dzmaz"));return}
   t=e.target.closest("[data-zmaz]");if(t){zmen(t.getAttribute("data-zmaz"),0);return}
   t=e.target.closest("[data-kosik]");if(t){e.preventDefault();otvor();return}
   t=e.target.closest("[data-mn-btn]");if(t){var i=document.querySelector("[data-mn-hl]");i.value=Math.max(1,(parseInt(i.value)||1)+ +t.getAttribute("data-mn-btn"))}
@@ -124,10 +141,10 @@ if(pk){
   /* skúšobná brána Comgate: kartu ukážeme len s ?karta=1 (zapamätá sa v relácii); po ostrom spustení zmeniť KARTA_TEST na false */
   var KARTA_TEST=false;try{if(/[?&]karta=1/.test(location.search))sessionStorage.setItem("mk_karta","1");if(KARTA_TEST&&sessionStorage.getItem("mk_karta")!=="1")delete PLA.karta}catch(e){}
   if(E.pla){Object.keys(PLA).forEach(function(k){if(E.pla.indexOf(k)<0)delete PLA[k]});if(!PLA[vol.pl])vol.pl=Object.keys(PLA)[0];if(PLA.dobierka)PLA.dobierka[2]=null}
-  function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){var pr=(E.produkty||[]).filter(function(y){return y.id==x.id})[0];return s+x.q*((pr&&pr.w)||0.3)},0);c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
+  function cd(){var D=DOP[vol.d],c=D[2];if(c===null)return null;if(D[3]){var w=K.reduce(function(s,x){var pr=(E.produkty||[]).filter(function(y){return y.id==x.id})[0];return s+x.q*((pr&&pr.w)||0.3)},0)+dpoc()*0.3;c=D[3][D[3].length-1][1];for(var i=0;i<D[3].length;i++){if(w<=D[3][i][0]){c=D[3][i][1];break}}}if(D[4]&&spolu()>=D[4])c=0;return c}
   function poplatky(){return (cd()||0)+(PLA[vol.pl][2]||0)}
   function neznama(){return DOP[vol.d][2]===null||PLA[vol.pl][2]===null}
-  function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+
+  function suhrn(){return '<aside class="suhrn"><h2>Súhrn objednávky</h2>'+K.map(function(x){return polozka(x,0)}).join("")+darRiadky(0)+
     '<div class="rd" style="margin-top:10px"><span>Tovar</span><span>'+eur(spolu())+'</span></div><div class="rd"><span>Doprava a platba</span><span>'+(neznama()?"podľa cenníka":poplatky()?eur(poplatky()):"zadarmo")+'</span></div>'+
     '<div class="rd sp"><span>'+(neznama()?"Spolu s DPH bez dopravy":"Spolu s DPH")+'</span><span>'+eur(spolu()+poplatky())+'</span></div><p class="pozn">'+(vol.pl==="karta"?"Po odoslaní objednávky Vás presmerujeme na platobnú bránu Comgate.":"Platba bankovým prevodom, údaje dostanete e-mailom.")+'</p></aside>'}
   function kroky(){return '<div class="kroky">'+["Košík","Doprava a platba","Údaje","Hotovo"].map(function(t,i){return '<span class="'+(i+1===krok?"ak2":"")+'">'+(i+1)+". "+t+'</span>'}).join("")+'</div>'}
@@ -136,7 +153,7 @@ if(pk){
     if(krok===4)return;
     if(!K.length){pk.innerHTML='<div class="hotovo"><h1>Košík je prázdny</h1><p>Pridajte si do košíka niečo z ponuky a vyskúšajte si celú objednávku.</p><p style="margin-top:28px"><a class="bt" href="'+PRE+'produkty/">Prezrieť ponuku</a></p></div>';return}
     var h='<div class="pk"><div>'+kroky();
-    if(krok===1)h+='<h2>Košík</h2>'+K.map(function(x){return polozka(x,1)}).join("")+'<div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap"><button class="bt" data-dalej>Doprava a platba</button><a class="bt sv" href="'+PRE+'produkty/">Nakupovať ďalej</a></div>';
+    if(krok===1)h+='<h2>Košík</h2>'+K.map(function(x){return polozka(x,1)}).join("")+darRiadky(1)+darSekcia()+'<div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap"><button class="bt" data-dalej>Doprava a platba</button><a class="bt sv" href="'+PRE+'produkty/">Nakupovať ďalej</a></div>';
     if(krok===2)h+='<h2>Doprava</h2>'+moznosti("d",DOP,vol.d)+'<h2>Platba</h2>'+moznosti("pl",PLA,vol.pl)+'<button class="bt" data-dalej>Pokračovať</button>';
     if(krok===3)h+='<h2>Kontaktné údaje</h2><form data-form><div class="pole"><label>Meno a priezvisko<input name="meno" required autocomplete="name"></label><label>E-mail<input name="email" type="email" required autocomplete="email"></label>'+
       '<label>Telefón<input name="tel" autocomplete="tel"></label><label>PSČ<input name="psc" required autocomplete="postal-code"></label><label class="cele">Ulica a číslo<input name="ulica" required autocomplete="street-address"></label>'+
@@ -166,16 +183,17 @@ if(pk){
     var f=btn.form,sp=Math.round((spolu()+(cd()||0))*100)/100;btn.disabled=true;var tx=btn.textContent;btn.textContent="Odosielam…";
     var body={items:K.map(function(x){return{id:x.id,q:x.q}}),ship:vol.d,total:DOP[vol.d][2]===null?undefined:sp,agree:!!fd.get("agree"),hp:fd.get("hp")||"",ms:Date.now()-T0,
       customer:{name:fd.get("meno"),email:fd.get("email"),phone:fd.get("tel"),street:fd.get("ulica"),city:fd.get("mesto"),zip:fd.get("psc"),note:fd.get("pozn")}};
+    body.gifts=Object.keys(D).map(function(k){return{id:k,q:D[k]}});var gtxt=Object.keys(D).map(function(k){return P[k].n}).join(", ");
     if(body.total===undefined)delete body.total;
     (function(){var h=0,t=JSON.stringify([body.items,body.ship,body.customer.email]);for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;body.key=KEY0+"-"+(h>>>0).toString(36)})();
     if(vol.d==="paketa"&&vol.pp)body.pickup=vol.pp;
     if(vol.pl==="karta")body.method="karta";
     var snap=K.map(function(x){return gi(x.id,x.q)});
-    fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})}).then(function(x){
+    (fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok&&j.ok,j:j}})})).then(function(x){
       if(!x.ok){btn.disabled=false;btn.textContent=tx;chyba(f,x.j.error||x.j.message||"Objednávku sa nepodarilo odoslať. Skúste to prosím znova alebo nám napíšte na "+E.email+".");return}
       var j=x.j,p=j.pay;if(j.redirect){btn.textContent="Presmerúvam na platbu…";ge("purchase",K.map(function(x){return gi(x.id,x.q)}),{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});K=[];uloz(KK,K);location.href=j.redirect;return}krok=4;
       pk.innerHTML='<div class="hotovo"><div class="ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
-        '<h1>Ďakujeme, objednávka č. '+esc(j.num)+' je prijatá</h1>'+(j.test?'<p><b>Skúšobná prevádzka:</b> objednávka nebude vybavená, nič neplaťte.</p>':'')+
+        '<h1>Ďakujeme, objednávka č. '+esc(j.num)+' je prijatá</h1>'+(j.test?'<p><b>Skúšobná prevádzka:</b> objednávka nebude vybavená, nič neplaťte.'+(gtxt?' Kniha zdarma v objednávke: '+esc(gtxt)+'.':'')+'</p>':'')+
         '<p>Potvrdenie sme poslali na '+esc(String(fd.get("email")))+'.</p>'+
         (p?(function(){var mob=window.matchMedia&&matchMedia("(max-width:820px)").matches;
           function rr(l,v,id){return '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.1)"><div style="text-align:left"><div style="font-size:12px;opacity:.7">'+l+'</div><div style="font-size:17px;font-weight:600;word-break:break-all">'+esc(v)+'</div></div><button type="button" class="bt kop" data-k="'+esc(id)+'" style="padding:8px 14px;font-size:14px">Kopírovať</button></div>'}
@@ -188,7 +206,7 @@ if(pk){
       var kd=pk.querySelector(".kopdalej");if(kd){var _v=[String(p.iban_f).replace(/\s/g,""),String(p.amount).replace(".",","),String(p.vs)],_n=["IBAN","sumu","VS"],_i=0,_rows=pk.querySelectorAll(".pr");kd.addEventListener("click",function(){var v=_v[_i],i=_i,done=function(){_rows[i].style.background="#e8f6e8";_rows[i].style.borderRadius="6px";_i=(i+1)%3;kd.textContent=i<2?"✓ Skopírované. Ďalej: "+(i+2)+"/3 "+_n[i+1]:"✓ Hotovo. Skopírovať znova: 1/3 IBAN"};if(navigator.clipboard)navigator.clipboard.writeText(v).then(done,done);else done()})}
       pk.querySelectorAll(".kop").forEach(function(b){b.addEventListener("click",function(){var v=b.previousElementSibling?b.previousElementSibling.lastChild.textContent:"";v=b.parentNode.querySelector("div div:last-child").textContent;if(b.getAttribute("data-k")==="iban")v=v.replace(/\\s/g,"");if(b.getAttribute("data-k")==="suma")v=v.replace(/[^0-9,]/g,"");var ok=function(){b.textContent="Skopírované ✓"};if(navigator.clipboard)navigator.clipboard.writeText(v).then(ok,ok);else ok()})});
       ge("purchase",snap,{transaction_id:String(j.num),shipping:(j.ship&&j.ship.price)||0});
-      K=[];uloz(KK,K);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
+      K=[];D={};uloz(KK,K);uloz(KD,D);document.querySelectorAll(".pocet").forEach(function(b){b.textContent=0;b.classList.remove("je")});scrollTo(0,0);
     }).catch(function(){btn.disabled=false;btn.textContent=tx;chyba(f,"Spojenie sa prerušilo. Objednávka mohla byť prijatá – skontrolujte e-mail. Ak potvrdenie nepríde, odošlite ju prosím znova, druhá objednávka sa nevytvorí.")});
   }
 }
@@ -231,7 +249,7 @@ function zavri(){if(o){o.remove();o=null}document.removeEventListener("keydown",
 function kd(e){if(e.key==="Escape")zavri()}
 function otvor(){if(o)return;
 o=document.createElement("div");o.className="vyp-o";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-labelledby","vyp-t");
-o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><h2 id="vyp-t">Výpredaj učebníc a slovníkov</h2><p>Jazykové pomôcky z nášho skladu za zvýhodnené ceny. Platí do vypredania zásob.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
+o.innerHTML='<div class="vyp"><button class="vyp-x" aria-label="Zavrieť">✕</button><div class="vyp-s">Výpredaj skladových zásob</div><div class="vyp-d"><a href="'+BASE_+'darcekove-knihy/index.html">Za každých 30 € kniha zdarma</a></div><h2 id="vyp-t">Výpredaj učebníc a slovníkov</h2><p>Jazykové pomôcky z nášho skladu za zvýhodnené ceny. Platí do vypredania zásob.</p><a class="bt" href="'+BASE_+'produkty/?k=akcia">Pozrieť výpredaj</a></div>';
 o.addEventListener("click",function(e){if(e.target===o||e.target.closest(".vyp-x")||e.target.closest("a"))zavri()});
 document.addEventListener("keydown",kd);document.body.appendChild(o);var b=o.querySelector(".bt");if(b)b.focus()}
 setTimeout(otvor,2000);

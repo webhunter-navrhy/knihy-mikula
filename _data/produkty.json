@@ -362,5 +362,47 @@
   "c": 32.0,
   "skladom": true,
   "w": 3.5
+ },
+ {
+  "id": "p78",
+  "n": "Milujem Paríž!",
+  "c": 19.0,
+  "skladom": true,
+  "w": 2.0
+ },
+ {
+  "id": "p79",
+  "n": "Ahoj, nemčina!",
+  "c": 23.0,
+  "skladom": true,
+  "w": 1.0
+ },
+ {
+  "id": "p80",
+  "n": "Svet mám vo vrecku!",
+  "c": 20.0,
+  "skladom": true,
+  "w": 0.6
+ },
+ {
+  "id": "p81",
+  "n": "Ciao, Italia!",
+  "c": 20.0,
+  "skladom": true,
+  "w": 1.8
+ },
+ {
+  "id": "p82",
+  "n": "Veľké slovníky za malú cenu",
+  "c": 40.0,
+  "skladom": true,
+  "w": 3.5
+ },
+ {
+  "id": "p83",
+  "n": "Štyri jazyky v jednom balíčku",
+  "c": 25.0,
+  "skladom": true,
+  "w": 1.5
  }
 ]
